@@ -7,7 +7,8 @@ export type Ttodo = {
 
 export const initialState = {
     data: [],
-    todo: []
+    todo: [],
+    arr_index: 0
 }
 
 
@@ -20,6 +21,9 @@ const reducerData = createSlice({
         },
         todoList:(state, action) => {
             state.todo = action.payload
+        },
+        setIndex:(state, action) => {
+            state.arr_index = action.payload
         }
     }
 })
@@ -27,7 +31,8 @@ const reducerData = createSlice({
 
 export const{
     usersData,
-    todoList
+    todoList,
+    setIndex
 } = reducerData.actions
 
 

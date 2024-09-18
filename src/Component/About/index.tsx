@@ -3,18 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { todoList } from '../../reducers/reducerUser'
 import styles from './style.module.scss'
+import Navbar from '../navbar'
 
 const InputForm = () => {
-  const todo = useSelector((state: RootState) => state.userData.todo)
+  const {todo, arr_index  } = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index}))
   const dispatch = useDispatch()
   let dragged: HTMLElement | null = null
+  const value: any = todo[arr_index | 0]
 
-  const listTodo = todo.filter((res:any)=>{ return res.stage === "todo"})
-  const listProgres = todo.filter((res:any)=>{ return res.stage === "process"})
-  const listDone = todo.filter((res:any)=>{ return res.stage === "done"})
-
+  
   const updateStageByPush = (taskArray: any[], taskIndex: number, dragged: any) => {
-    const value: any = [...todo]
+    const Todo: any = todo[arr_index | 0]
+    const value: any = [...Todo.data]
     const datatypeIndex = Number(dragged.dataset.datatype);
     const draggedIndex = Number(dragged.id);
     const data = value[Number(dragged.dataset.datatype)].data.filter((res:any, idx: number)=> idx !== draggedIndex)
@@ -26,7 +26,7 @@ const InputForm = () => {
       ...value[Number(taskIndex)],
       data:[...(value[Number(taskIndex)]?.data || []), dragged.innerText]
     }
-    dispatch(todoList(value))
+    map_Array(value)
 
   };
 
@@ -35,116 +35,126 @@ const InputForm = () => {
     if(event){
       const formdata: any = new FormData(event.currentTarget)
       const query = formdata.get("todolist") as string   
-      const value: any = todo[0]
+      const Todo: any = todo[arr_index]
+      const value: any = Todo.data[0]
       const data = value?.data || []
       const added = [...data, query]
       const update = { ...value, data: added}
-      const push = [update, ...todo.slice( 1)]
-      dispatch(todoList(push))
-      console.log(dragged)
+      const push = [update, ...Todo.data.slice( 1)]
+      map_Array(push)
+      const inputField = event.currentTarget.querySelector('input[name="todolist"]') as HTMLInputElement | null;
+      setTimeout(()=>{
+        if (inputField) {
+          inputField.value = '';
+        }
+      },500)
     }
   }
 
   const onDelete = (dragged: any) => {
     const datatypeIndex = Number(dragged.dataset.datatype);
     const draggedIndex = Number(dragged.id);
-    const value: any = [...todo]
+    const Todo: any = todo[arr_index | 0]
+    const value: any = [...Todo.data]
     const data = value[Number(dragged.dataset.datatype)].data.filter((res:any, idx: number)=> idx !== draggedIndex)
     value[datatypeIndex] = {
       ...value[datatypeIndex],
       data: data
     }
-    dispatch(todoList(value))
+    map_Array(value)
   }
   const Stages = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if(event){
-    const forms = new FormData(event.currentTarget)
-    const query = forms.get('Stages') as string 
-    const hero = 'fars'
-    const Add = {stage: query, data: []}
-    const array = [...todo, Add ]
-    dispatch(todoList(array))
-    console.log(query)
+      const forms = new FormData(event.currentTarget)
+      const query = forms.get('Stages') as string
+      const Add = {stage: query, data: []}
+      const stage_add =  Add
+      map_Array(stage_add, true)
+      const inputField = event.currentTarget.querySelector('input[name="Stages"]') as HTMLInputElement | null;
+      setTimeout(()=>{
+        if (inputField) {
+          inputField.value = '';
+        }
+      },500)
+    }
   }
+  const deleteStage = (data: string) => {
+    const Todo: any = todo[arr_index | 0]
+    const filter = Todo.data.filter((res: any) => res.stage !== data)
+    map_Array(filter)
   }
-  console.log(todo)
+  const map_Array = (data: any, bool: boolean = false ) => {
+    const Todo: any = todo[arr_index | 0]
+    const updatedTodo = todo.map((item: any, index: number) => {
+      if (index === arr_index && item.folder === Todo.folder) {
+        return {
+          ...item,
+          data: bool ? [...item.data, data] : data,
+        };
+      }
+      return { ...item }; 
+    });
+    dispatch(todoList(updatedTodo))
+  }
   return (
     <>
     <div className={styles.container}>
-      {todo.map((res: any, index: number)=>{
-        return(
-          <div className="zone" id="todo"
-          onDrop={(e)=>{
-            e.preventDefault()
-            if(dragged){
-              updateStageByPush(res, index, dragged)
-            } 
-          }} onDragOver={(e)=> {
-            e.preventDefault()
-          }}
-          >
-            <h1>{res.stage}</h1>
-            {res.data.map((data: any, idx: number)=> {
-              return(
-                <div key={idx} data-datatype={index} id={idx.toString()} style={{cursor: 'pointer', position:"relative"}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} 
-                onClick={(e)=>{onDelete(e.target)}} >
-                  {data}<br/>
-                </div>
-              )
-            })}
-          </div>
-        )
-      })
-      }
-    
-      {/* <div className="zone" id="process" onDrop={(e)=>{
-        e.preventDefault()
-        if(dragged){
-          updateStageByPush(todo, dragged.id, 'process')
-        }
-      }} onDragOver={(e)=> {
-        e.preventDefault()
-      }}>
-        <h1>Process</h1>
-        {listProgres.map((res: any, idx: number)=> {
-          return(
-            <div key={idx} id={res.task} style={{cursor: 'pointer'}} draggable="true" onDrag={(e: any)=>{
-              dragged = e.target
-            }} >
-              {res.task}<br/>
-            </div>
-          )
-        })}
+      <Navbar/>
+      <div className={styles.todoList}>
+        <div className={styles.content} style={{ gridTemplateColumns: value.data.length !== 0 ? "repeat(5, 1fr)": ""}}>
+          {value && value?.data.length === 0 ?
+          <div className={styles.createList}>
+            Create List
+          </div> 
+          :   
+          value?.data?.map((res: any, index: number)=>{
+            return(
+              <div key={index} className={`zone ${styles.listed}`} id="todo"
+                onDrop={(e)=>{
+                  e.preventDefault()
+                  if(dragged){
+                    updateStageByPush(res, index, dragged)
+                  } 
+                }} onDragOver={(e)=> {
+                  e.preventDefault()
+                }}
+
+              >
+                <h1>{res.stage}</h1>
+                <ul style={{position: "relative"}}>
+                  <div style={{position: "absolute", top: "-22px", right:"5px", cursor: "pointer"}} onClick={()=>{
+                  deleteStage(res.stage)
+                }}>x</div>
+                {res?.data?.map((data: any, idx: number)=> {
+                  return(
+                    <li key={idx} className={styles.card} data-datatype={index} id={idx.toString()} style={{cursor: 'pointer', position:"relative"}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} 
+                     >
+                      {data} <span  onClick={(e)=>{
+                        const id = document.getElementById(idx.toString()) as HTMLElement
+                        onDelete(id)
+                      }}>X</span>
+                    </li>
+                  )
+                })}
+                </ul>
+              </div>
+            )
+          })
+          }
+        </div>
+        <div className={styles.Formdata}>
+          <form onSubmit={(e)=> todo && todo.length !== 0 ? Stages(e) : alert('Add Todolist First')} className={styles.Stages}>
+            <input required type="text" name="Stages" id="stage" />
+            <button type='submit'>Add Stages</button>
+          </form>
+          <form onSubmit={(e:any) =>  todo && value.data.length !== 0 ? onClick(e) : alert('Add Stages')} className={styles.TaskInput}>
+            <input required type="text" name="todolist"/>
+            <button type='submit' value='sbmit'>Add Task</button>
+          </form>
+        </div>
       </div>
-      <div className="zone" id="done" onDrop={(e)=>{
-        e.preventDefault()
-        if(dragged){
-          updateStageByPush(todo, dragged.id, 'done')
-        }
-      }} onDragOver={(e)=> {
-        e.preventDefault()
-      }}>
-        <h1>Done</h1>
-        {listDone.map((res: any, idx: number)=> {
-          return(
-            <div key={idx} id={res.task} style={{cursor: 'pointer'}} draggable="true" onDrag={(e: any)=>{
-              dragged = e.target
-            }} >
-              {res.task}<br/>
-            </div>
-          )
-        })}
-      </div> */}
     </div>
-    <form onSubmit={Stages}>
-      <input type="text" name="Stages" id="stage" />
-      <button type='submit'>Add Stages</button>
-    </form>
-    <form onSubmit={ onClick}>
-      <input type="text" name="todolist"/>
-      <button type='submit' value='sbmit'>Add Task</button>
-    </form>
     </>
   )
 }
