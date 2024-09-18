@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './style.module.scss'
 import { setIndex, todoList } from '../../reducers/reducerUser'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import { motion } from "framer-motion"
 const Navbar = () => {
   const [toggle, setToggle] = useState(false)
+  const [number, setNumber] = useState(false)
   const{ todo, arr_index}   = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index}))
   const dispatch = useDispatch()
   const Todo: any = todo
@@ -36,17 +37,33 @@ const Navbar = () => {
     const filter: any = Todo.filter((res: any, index: number)=> index !== data )
     dispatch(todoList(filter))
   }
+
+  useEffect(() => {
+    const handleLoad = () => {
+      console.log(window.innerWidth, 'widht');
+      console.log(830 >= window.innerWidth, 'here')
+      setNumber(830 >= window.innerWidth);
+    };
+  
+    window.addEventListener('onload', handleLoad);
+  
+    return () => {
+      window.removeEventListener('onload', handleLoad);
+    };
+  }, []);
+  console.log(toggle)
   return (
     <>
     <div
     className={classnames({
-      [styles.btnNavL]: !toggle,
-      [styles.btnNavR]: toggle
+      [styles.btnNavL]: !toggle
     })} 
     onClick={()=>{setToggle(!toggle)}}
+    style={{display: toggle ? "none" : "block"}}
     >Button</div>
-    <motion.nav className={styles.sidebar} animate={toggle ? "open" : "closed"}
+    <motion.div className={styles.sidebar} animate={ !number ? "open" : toggle ? "open" : "closed"}
       variants={variants} >
+      <div className={styles.btnNavR} onClick={()=>{setToggle(!toggle)}}>Button</div>
       <div className={styles.navtop}>
         <div className={styles.folder}>
           <h1>Folder</h1>
@@ -70,7 +87,7 @@ const Navbar = () => {
         <div>Delete</div>
         <div>Select All</div>
       </div>
-    </motion.nav>
+    </motion.div>
     </>
   )
 }

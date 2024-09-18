@@ -8,7 +8,10 @@
         flex-direction: column;
         background-color: rgba(0,0,0,.01);
         padding-right: 1rem;
-        @media only screen and (width: 830px) {
+        @media only screen and (min-width: 500px) and (max-width: 830px) {
+            width: 100%;
+           }
+           @media only screen and (min-width: 200px) and (max-width: 500px) {
             width: 100%;
            }
         .content{
@@ -48,6 +51,14 @@
                     }
 
                 }
+                @media only screen and (min-width: 200px) and (max-width: 500px) {
+                    width: 215px;
+                    margin: 0rem 0.5rem;
+                    border: solid 1px;
+                    border-radius: 0.7rem;
+                    height: 325px;
+                    margin-bottom: 3rem;
+                }
             }
             .createList{
                 width: 100%;
@@ -79,6 +90,18 @@
                     cursor: pointer;
                     border-radius: 1rem;
                 }
+                @media only screen and (min-width: 200px) and (max-width: 600px) {
+                    input{
+                        width: 51%;
+                        border-radius: 1.7rem;
+                        margin-right: .5rem;
+                    }
+                    button{
+                        width: 30%;
+                        cursor: pointer;
+                        border-radius: 1rem;
+                    }
+                }
             }
             .TaskInput{
                 height: 30%;
@@ -93,6 +116,18 @@
                     width: 16%;
                     cursor: pointer;
                     border-radius: 1rem;
+                }
+                @media only screen and (min-width: 200px) and (max-width: 600px) {
+                    input{
+                        width: 51%;
+                        border-radius: 1.7rem;
+                        margin-right: .5rem;
+                    }
+                    button{
+                        width: 30%;
+                        cursor: pointer;
+                        border-radius: 1rem;
+                    }
                 }
             }
         }
