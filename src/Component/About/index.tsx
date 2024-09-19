@@ -8,8 +8,24 @@ import Navbar from '../navbar'
 const InputForm = () => {
   const {todo, arr_index  } = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index}))
   const dispatch = useDispatch()
+  const [number, setNumber] = useState(0)
   let dragged: HTMLElement | null = null
-  const value: any = todo[arr_index | 0]
+  const value: any = todo[arr_index ]
+
+
+  useEffect(() => {
+    setNumber(window.outerWidth)
+    const resize = ()=> {
+      setNumber(window.outerWidth)
+    }
+
+    window.addEventListener('resize', resize)
+
+    return() =>{
+      window.addEventListener('beforeunload', resize)
+    }
+    
+  }, [])
 
   
   const updateStageByPush = (taskArray: any[], taskIndex: number, dragged: any) => {
@@ -97,12 +113,13 @@ const InputForm = () => {
     });
     dispatch(todoList(updatedTodo))
   }
+  console.log(value)
   return (
     <>
     <div className={styles.container}>
-      <Navbar/>
+      <Navbar number={number}/>
       <div className={styles.todoList}>
-        <div className={styles.content} style={{ gridTemplateColumns: value.data.length !== 0 ? "repeat(5, 1fr)": ""}}>
+        <div className={styles.content} style={{ gridTemplateColumns: value.data.length !== 0 ? number >= 500 ? "repeat(5, 1fr)" : "": "", justifyContent: value.data.length !== 0 ? "flex-start": "center"}}>
           {value && value?.data.length === 0 ?
           <div className={styles.createList}>
             Create List

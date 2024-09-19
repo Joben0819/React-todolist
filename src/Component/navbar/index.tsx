@@ -5,12 +5,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import classnames from 'classnames'
 import { motion } from "framer-motion"
-const Navbar = () => {
+type TNavbar = {
+  number: number
+}
+
+
+const Navbar = ({number}:TNavbar) => {
   const [toggle, setToggle] = useState(false)
-  const [number, setNumber] = useState(false)
   const{ todo, arr_index}   = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index}))
   const dispatch = useDispatch()
   const Todo: any = todo
+
   const Stages = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if(event){
@@ -38,20 +43,6 @@ const Navbar = () => {
     dispatch(todoList(filter))
   }
 
-  useEffect(() => {
-    const handleLoad = () => {
-      console.log(window.innerWidth, 'widht');
-      console.log(830 >= window.innerWidth, 'here')
-      setNumber(830 >= window.innerWidth);
-    };
-  
-    window.addEventListener('onload', handleLoad);
-  
-    return () => {
-      window.removeEventListener('onload', handleLoad);
-    };
-  }, []);
-  console.log(toggle)
   return (
     <>
     <div
@@ -61,7 +52,7 @@ const Navbar = () => {
     onClick={()=>{setToggle(!toggle)}}
     style={{display: toggle ? "none" : "block"}}
     >Button</div>
-    <motion.div className={styles.sidebar} animate={ !number ? "open" : toggle ? "open" : "closed"}
+    <motion.div className={styles.sidebar} animate={ number >= 831  ? "open" : toggle === true ? "open" : "closed" }
       variants={variants} >
       <div className={styles.btnNavR} onClick={()=>{setToggle(!toggle)}}>Button</div>
       <div className={styles.navtop}>

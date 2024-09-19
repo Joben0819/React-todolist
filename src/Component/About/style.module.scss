@@ -16,15 +16,18 @@
            }
         .content{
             display: grid;
-            justify-content: space-around;
             height: 80%;
             overflow: scroll;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* Internet Explorer/Edge */
+            // justify-content: flex-start;
             &::-webkit-scrollbar {
                 display: none; /* Chrome, Safari, and Opera */
               }
-              margin-top: 2rem;
+              margin-top: 3rem;
+              @media only screen and (min-width: 200px) and (max-width: 500px) {
+                justify-content: center!important;
+              }
             .listed{
                 width: 215px;
                 margin: 0rem .5rem;
@@ -58,6 +61,14 @@
                     border-radius: 0.7rem;
                     height: 325px;
                     margin-bottom: 3rem;
+                    display: flex;
+                    flex-direction: column;
+                    h1{
+                        height: 15%;
+                    }
+                    ul{
+                        height: 80%;
+                    }
                 }
             }
             .createList{
