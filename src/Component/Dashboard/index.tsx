@@ -40,10 +40,12 @@ const Dashboard = () => {
       ...value[datatypeIndex],
       data: data
     }
+    const firstWord = dragged.innerText.split('\n')[0];
     value[Number(taskIndex)] ={
       ...value[Number(taskIndex)],
-      data:[...(value[Number(taskIndex)]?.data || []), dragged.innerText]
+      data:[...(value[Number(taskIndex)]?.data || []), firstWord]
     }
+
     map_Array(value)
 
   };
@@ -59,6 +61,7 @@ const Dashboard = () => {
       const added = [...data, query]
       const update = { ...value, data: added}
       const push = [update, ...Todo.data.slice( 1)]
+      console.log(push, 'push')
       map_Array(push)
       const inputField = event.currentTarget.querySelector('input[name="todolist"]') as HTMLInputElement | null;
       setTimeout(()=>{
@@ -115,7 +118,8 @@ const Dashboard = () => {
     });
     dispatch(todoList(updatedTodo))
   }
-  console.log(color, 'here')
+  console.log(value?.data[0]?.data, 'here')
+  const data_length = value.data.every((res: any) => res.data.length === 0)
   return (
     <>
     <div className={styles.container} style={{fontFamily: `${fontFamily}`}}>
@@ -124,10 +128,10 @@ const Dashboard = () => {
         <div className={styles.content} style={{ gridTemplateColumns: todo.length === 0 ? "" : value?.data?.length !== 0 ? number >= 500 ? "repeat(5, 1fr)" : "": "", justifyContent: todo.length === 0 ? "center" : value?.data?.length !== 0 ? "flex-start": "center"}}>
           {todo.length === 0 ? 
           <div className={styles.createList} >
-            Create List
+            Create Folder
           </div>  : value?.data.length === 0 ?
           <div className={styles.createList} >
-            Create List
+            Create Stages
           </div> 
           :   
           value?.data?.map((res: any, index: number)=>{
@@ -143,19 +147,41 @@ const Dashboard = () => {
                 }}
 
               >
-                <h1>{res.stage}</h1>
-                <ul style={{position: "relative"}}>
-                  <div style={{position: "absolute", top: "-22px", right:"5px", cursor: "pointer"}} onClick={()=>{
-                  deleteStage(res.stage)
-                }}>x</div>
-                {res?.data?.map((data: any, idx: number)=> {
+                <h1>
+                  {res.stage}                   
+                    <div style={{position: "absolute", top: "-7px", right:"10px", fontSize:"24px" , cursor: "pointer"}} onClick={()=>{
+                    deleteStage(res.stage)
+                  }}>
+                    x
+                  </div>
+                </h1>
+                <ul style={{position: "relative", padding: data_length ? "0": "", textAlign: data_length ? "center": "unset" }}>
+                {data_length ? <div>Add task</div>: ""} 
+                {res.data.map((data: any, idx: number)=> {
                   return(
-                    <li key={idx} className={styles.card} data-datatype={index} id={idx.toString()} style={{cursor: 'pointer', position:"relative", fontSize: `${font_size}px`}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} 
-                     >
-                      {data} <span  onClick={(e)=>{
-                        const id = document.getElementById(idx.toString()) as HTMLElement
+                    <li key={idx} className={styles.card} data-datatype={index} id={idx?.toString()} style={{cursor: 'pointer', position:"relative", fontSize: `${font_size || 16}px`}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} onTouchStart={(e: any) => {dragged = e.target; console.log(e.target)} }>
+                      { data} 
+                      
+                      <div className={styles.delete} onClick={(e)=>{
+                        const id = document.getElementById(idx?.toString()) as HTMLElement
                         onDelete(id)
-                      }}>X</span>
+                      }}>
+                        X
+                      </div>
+                      <div className={styles.switch} >
+                        {value?.data?.map((res:any, index:number)=>{
+                          return(
+                            <span onClick={(e)=> {
+                              const id = document.getElementById(idx?.toString()) as HTMLElement
+                              if(id){
+                              updateStageByPush(res, index, id)
+                              }
+                            }}>
+                              {res.stage}
+                            </span>
+                          )
+                        })}
+                      </div>
                     </li>
                   )
                 })}

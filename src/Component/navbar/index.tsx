@@ -68,17 +68,24 @@ const Navbar = ({number , toggle , setToggle}:TNavbar) => {
       <div className={styles.navtop}>
         <div className={styles.folder}>
           <h1>Folder</h1>
-          {Todo?.map((res: any, idx: number)=>{
-            return(
-              <div key={idx} className={styles.files} onClick={()=> {dispatch(setIndex(Number(idx))); number <= 841 && setToggle()}} style={{cursor: "pointer", color: arr_index === idx ? "blue": "black"}}>
-                {res.folder}
-              </div>
-            )
-          })}
+          <div className={styles.container_files}>
+            {Todo?.map((res: any, idx: number)=>{
+              return(
+                <div key={idx} className={styles.files} onClick={()=> {dispatch(setIndex(Number(idx))); number <= 841 && setToggle()}} style={{cursor: "pointer", color: arr_index === idx ? "blue": "black"}}>
+                  {res.folder}
+                  <div className={styles.delete} onClick={()=>{
+                      Delete(idx)
+                    }}>
+                      x
+                    </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
         <form onSubmit={Stages} className={styles.Stages}>
           <input required type="text" name="Folder" id="fold" />
-          <button type='submit'>Add Floder</button>
+          <button type='submit'>Add Folder</button>
         </form>
       </div>
       <div className={styles.navbottom}>
@@ -91,22 +98,13 @@ const Navbar = ({number , toggle , setToggle}:TNavbar) => {
         </div>
         <div className={styles.text_size}>
           <span>Font Size: </span>           
-          <input type="number" placeholder={font_size.toString()} onChange={(e)=> {
+          <input type="number" placeholder={font_size?.toString()} onChange={(e)=> {
             if(Number(e.target.value) <= 300){
               console.log(e.target.value)
               dispatch(setFonSize(Number(e.target.value)))
             }
           }} min="0" max="300" className={styles.range} />
         </div> 
-        <div className={styles.onDelete}> 
-          <span>Delete:</span> 
-          <div className={styles.switch}>
-            <label htmlFor="">Yes</label>
-            <input type="radio" name="bolean" value="Yes"/>
-            <label htmlFor="">No</label>
-            <input type="radio" name="bolean" value="Yes" checked={true}/>
-          </div>
-        </div>
         <div className={styles.fontFamily}>
           <span>Font Style</span> 
           <select name="cars" id="cars" className={styles.select} value={fontFamily} onChange={(e)=>dispatch(setFontFamily(e.target.value))}>

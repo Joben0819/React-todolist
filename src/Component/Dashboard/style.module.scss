@@ -37,21 +37,40 @@
                     text-align: center;
                     border-bottom: solid 2px #fff;
                     margin-top: .3rem;
+                    position: relative;
                 }
                 .card{
                     padding: .5rem;
                     border-radius: .5rem;
                     position: relative;
-                    span{
+                    .delete{
                         display: none;
                         position: absolute;
                         right: 5px;
                         top: 8px;
                     }
-                    &:hover span{
+                    .switch{
+                        display: none;
+                        background-color: white;
+                        font-size: 14px;
+                        width: 93%;
+                        justify-content: space-around;
+                        bottom: -22px;
+                        left: -21px;
+                        position: absolute;
+                        height: 25px;
+                    }
+                    &:hover .delete{
                         display: block;
                     }
-
+                    @media only screen and (min-width: 200px) and (max-width: 500px) {
+                        &:hover .delete .switch{
+                            display: block;
+                        }
+                        &:hover .switch{
+                            display: flex;
+                        }
+                    }
                 }
                 @media only screen and (min-width: 200px) and (max-width: 500px) {
                     width: 215px;
