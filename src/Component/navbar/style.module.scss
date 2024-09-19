@@ -1,9 +1,10 @@
 .sidebar{
-    width: 20%;
+    width: 25%;
     display: flex;
     height: 100%;
     flex-direction: column;
-    @media only screen and (min-width: 500px) and (max-width: 830px) {
+    background-color: rgba(0, 0, 0, .04);
+    @media only screen and (min-width: 500px) and (max-width: 840px) {
         display: flex;   
         position: absolute;
         width: 100%;
@@ -18,7 +19,7 @@
         z-index: 1;
     }
     .navtop{
-        height: 60%;
+        height: 55%;
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -29,6 +30,15 @@
             flex-direction: column;
             h1{
                 text-align: center;
+            }
+            .files{
+                border: solid 2px #fff;
+                border-radius: 10px;
+                background-color: rgba(0, 0, 0, .3);
+                margin-bottom: .5rem;
+                height: 2rem;
+                display: grid;
+                align-items: center;
             }
         }
         .Stages{
@@ -45,8 +55,8 @@
                 border-radius: 1rem;
             }
         }
-        @media only screen and (min-width: 500px) and (max-width: 830px) {
-            width: 24%;
+        @media only screen and (min-width: 500px) and (max-width:840px) {
+            width: 30%;
             background-color: #fff;
         }
         @media only screen and (min-width: 200px) and (max-width: 500px) {
@@ -57,34 +67,56 @@
 
     }
     .navbottom{
-        height: 40%;
+        height: 45%;
         text-align: center;
         width: 100%;
-        @media only screen and (min-width: 500px) and (max-width: 830px) {
-            width: 24%;
+        @media only screen and (min-width: 500px) and (max-width:840px) {
+            width: 30%;
             background-color: #fff;
         }
         @media only screen and (min-width: 200px) and (max-width: 500px) {
             width: 100%;
             background-color: #fff;
         }
+
+        .color_change{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: .7rem;
+            padding: 0rem .5rem
+        }
+        .text_size{
+            @extend .color_change;
+        }
+        .onDelete{
+            @extend .color_change;
+            .switch{
+                display: flex;
+            }
+        }
+        .fontFamily{
+            @extend .color_change;
+            .select{
+                width: 60%;
+            }
+        }
     }
 }
 .btnNavL{
     display: none!important;
     position: absolute;
-    top: 10px;
+    top:4px;
     left: 10px;
 }
 .btnNavR{
     display: none!important;
     position: absolute;
     top: 10px;
-    right: 10px;
+    left: 4px;
     z-index: 2;
 }
 
-@media only screen and (min-width: 500px) and (max-width: 830px) {
+@media only screen and (min-width: 500px) and (max-width:840px) {
     .btnNavL{
     display: block!important;
     }
@@ -99,9 +131,6 @@
     }
     .btnNavR{
     display: block!important;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
+
     }
 }

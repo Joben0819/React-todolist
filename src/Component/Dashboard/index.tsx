@@ -6,12 +6,12 @@ import styles from './style.module.scss'
 import Navbar from '../navbar'
 
 const Dashboard = () => {
-  const {todo, arr_index  } = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index}))
+  const {todo, arr_index, color,font_size,fontFamily  } = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index, color: state.userData.color, font_size: state.userData.font_size, fontFamily: state.userData.fontFamily}))
   const dispatch = useDispatch()
   const [number, setNumber] = useState(0)
   const [toggle, setToggle] = useState(false)
   let dragged: HTMLElement | null = null
-  const value: any = todo[arr_index ]
+  const value: any = todo[arr_index || 0 ]
 
 
   useEffect(() => {
@@ -115,15 +115,18 @@ const Dashboard = () => {
     });
     dispatch(todoList(updatedTodo))
   }
-  console.log(value)
+  console.log(color, 'here')
   return (
     <>
-    <div className={styles.container}>
+    <div className={styles.container} style={{fontFamily: `${fontFamily}`}}>
       <Navbar number={number} toggle={toggle} setToggle={() => setToggle(!toggle)}/>
-      <div className={styles.todoList}>
-        <div className={styles.content} style={{ gridTemplateColumns: value.data.length !== 0 ? number >= 500 ? "repeat(5, 1fr)" : "": "", justifyContent: value.data.length !== 0 ? "flex-start": "center"}}>
-          {value && value?.data.length === 0 ?
-          <div className={styles.createList}>
+      <div className={styles.todoList} style={{backgroundColor: !color ? 'aliceblue': color}}>
+        <div className={styles.content} style={{ gridTemplateColumns: todo.length === 0 ? "" : value?.data?.length !== 0 ? number >= 500 ? "repeat(5, 1fr)" : "": "", justifyContent: todo.length === 0 ? "center" : value?.data?.length !== 0 ? "flex-start": "center"}}>
+          {todo.length === 0 ? 
+          <div className={styles.createList} >
+            Create List
+          </div>  : value?.data.length === 0 ?
+          <div className={styles.createList} >
             Create List
           </div> 
           :   
@@ -147,7 +150,7 @@ const Dashboard = () => {
                 }}>x</div>
                 {res?.data?.map((data: any, idx: number)=> {
                   return(
-                    <li key={idx} className={styles.card} data-datatype={index} id={idx.toString()} style={{cursor: 'pointer', position:"relative"}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} 
+                    <li key={idx} className={styles.card} data-datatype={index} id={idx.toString()} style={{cursor: 'pointer', position:"relative", fontSize: `${font_size}px`}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} 
                      >
                       {data} <span  onClick={(e)=>{
                         const id = document.getElementById(idx.toString()) as HTMLElement

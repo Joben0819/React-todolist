@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import { Users } from '../Api'
+import { color } from 'framer-motion'
 
 export type Ttodo = {
     todo: string[]
@@ -8,7 +9,11 @@ export type Ttodo = {
 export const initialState = {
     data: [],
     todo: [],
-    arr_index: 0
+    arr_index: 0,
+    color: 'aliceblue',
+    font_size: 0,
+    delete: false,
+    fontFamily: ''
 }
 
 
@@ -24,6 +29,15 @@ const reducerData = createSlice({
         },
         setIndex:(state, action) => {
             state.arr_index = action.payload
+        },
+        setColor:(state, action) => {
+            state.color = action.payload
+        },
+        setFonSize: (state, action )=>{
+            state.font_size = action.payload
+        },
+        setFontFamily: (state, action )=>{
+            state.fontFamily = action.payload
         }
     }
 })
@@ -32,7 +46,10 @@ const reducerData = createSlice({
 export const{
     usersData,
     todoList,
-    setIndex
+    setIndex,
+    setColor,
+    setFonSize,
+    setFontFamily
 } = reducerData.actions
 
 

@@ -6,9 +6,8 @@
         width: 80%;
         display: flex;
         flex-direction: column;
-        background-color: rgba(0,0,0,.01);
         padding-right: 1rem;
-        @media only screen and (min-width: 500px) and (max-width: 830px) {
+        @media only screen and (min-width: 500px) and (max-width: 840px) {
             width: 100%;
            }
            @media only screen and (min-width: 200px) and (max-width: 500px) {
@@ -16,27 +15,27 @@
            }
         .content{
             display: grid;
-            height: 80%;
+            height: 70%;
             overflow: scroll;
+            padding-top: 3rem ;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* Internet Explorer/Edge */
             // justify-content: flex-start;
             &::-webkit-scrollbar {
                 display: none; /* Chrome, Safari, and Opera */
               }
-              margin-top: 3rem;
               @media only screen and (min-width: 200px) and (max-width: 500px) {
                 justify-content: center!important;
               }
             .listed{
                 width: 215px;
                 margin: 0rem .5rem;
-                border: solid 1px;
+                border: solid 1px #fff;
                 border-radius: .7rem;
+                background-color: beige;
                 h1{
                     text-align: center;
-                    font-family: sans-serif;
-                    border-bottom: solid 1px;
+                    border-bottom: solid 2px #fff;
                     margin-top: .3rem;
                 }
                 .card{
