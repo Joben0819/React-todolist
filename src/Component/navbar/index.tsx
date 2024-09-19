@@ -7,11 +7,12 @@ import classnames from 'classnames'
 import { motion } from "framer-motion"
 type TNavbar = {
   number: number
+  toggle: any
+  setToggle: () => void
 }
 
 
-const Navbar = ({number}:TNavbar) => {
-  const [toggle, setToggle] = useState(false)
+const Navbar = ({number , toggle , setToggle}:TNavbar) => {
   const{ todo, arr_index}   = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index}))
   const dispatch = useDispatch()
   const Todo: any = todo
@@ -42,25 +43,25 @@ const Navbar = ({number}:TNavbar) => {
     const filter: any = Todo.filter((res: any, index: number)=> index !== data )
     dispatch(todoList(filter))
   }
-
+  console.log(number,'number')
   return (
     <>
     <div
     className={classnames({
       [styles.btnNavL]: !toggle
     })} 
-    onClick={()=>{setToggle(!toggle)}}
+    onClick={()=>{setToggle()}}
     style={{display: toggle ? "none" : "block"}}
     >Button</div>
     <motion.div className={styles.sidebar} animate={ number >= 831  ? "open" : toggle === true ? "open" : "closed" }
       variants={variants} >
-      <div className={styles.btnNavR} onClick={()=>{setToggle(!toggle)}}>Button</div>
+      <div className={styles.btnNavR} onClick={()=>{setToggle()}}>Button</div>
       <div className={styles.navtop}>
         <div className={styles.folder}>
           <h1>Folder</h1>
           {Todo?.map((res: any, idx: number)=>{
             return(
-              <div key={idx} onClick={()=> dispatch(setIndex(Number(idx)))} style={{cursor: "pointer", color: arr_index === idx ? "blue": "black"}}>
+              <div key={idx} onClick={()=> {dispatch(setIndex(Number(idx))); number <= 831 && setToggle()}} style={{cursor: "pointer", color: arr_index === idx ? "blue": "black"}}>
                 {res.folder}
               </div>
             )

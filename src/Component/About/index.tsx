@@ -117,7 +117,7 @@ const InputForm = () => {
   return (
     <>
     <div className={styles.container}>
-      <Navbar number={number}/>
+ 
       <div className={styles.todoList}>
         <div className={styles.content} style={{ gridTemplateColumns: value.data.length !== 0 ? number >= 500 ? "repeat(5, 1fr)" : "": "", justifyContent: value.data.length !== 0 ? "flex-start": "center"}}>
           {value && value?.data.length === 0 ?
