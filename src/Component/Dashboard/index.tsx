@@ -118,8 +118,7 @@ const Dashboard = () => {
     });
     dispatch(todoList(updatedTodo))
   }
-  console.log(value?.data[0]?.data, 'here')
-  const data_length = value.data.every((res: any) => res.data.length === 0)
+  const data_length = value?.data?.every((res: any) => res.data.length === 0)
   return (
     <>
     <div className={styles.container} style={{fontFamily: `${fontFamily}`}}>
