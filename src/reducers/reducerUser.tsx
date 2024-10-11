@@ -13,7 +13,8 @@ export const initialState = {
     color: 'aliceblue',
     font_size: 0,
     delete: false,
-    fontFamily: ''
+    fontFamily: '',
+    name: []
 }
 
 
@@ -38,6 +39,9 @@ const reducerData = createSlice({
         },
         setFontFamily: (state, action )=>{
             state.fontFamily = action.payload
+        },
+        setName:(state, action) => {
+            state.name = action.payload
         }
     }
 })
@@ -49,7 +53,8 @@ export const{
     setIndex,
     setColor,
     setFonSize,
-    setFontFamily
+    setFontFamily,
+    setName
 } = reducerData.actions
 
 

@@ -4,10 +4,18 @@ import { RootState } from '../../store'
 import { todoList } from '../../reducers/reducerUser'
 import styles from './style.module.scss'
 import Navbar from '../navbar'
-
+import stages from '../../assets/img/background_stage.png'
+import plus from '../../assets/img/plus.png'
+type dataModal = {
+  form: boolean,
+  status: number
+}
 const Dashboard = () => {
   const {todo, arr_index, color,font_size,fontFamily  } = useSelector((state: RootState) => ({todo: state.userData.todo, arr_index: state.userData.arr_index, color: state.userData.color, font_size: state.userData.font_size, fontFamily: state.userData.fontFamily}))
   const dispatch = useDispatch()
+  const [modal, setmodal] = useState<dataModal>({
+    form: false, status: 1
+  })
   const [number, setNumber] = useState(0)
   const [toggle, setToggle] = useState(false)
   let dragged: HTMLElement | null = null
@@ -61,13 +69,13 @@ const Dashboard = () => {
       const added = [...data, query]
       const update = { ...value, data: added}
       const push = [update, ...Todo.data.slice( 1)]
-      console.log(push, 'push')
       map_Array(push)
       const inputField = event.currentTarget.querySelector('input[name="todolist"]') as HTMLInputElement | null;
       setTimeout(()=>{
         if (inputField) {
           inputField.value = '';
         }
+        setmodal({form: false, status: 1})
       },500)
     }
   }
@@ -97,6 +105,7 @@ const Dashboard = () => {
         if (inputField) {
           inputField.value = '';
         }
+        setmodal({form: false, status: 1})
       },500)
     }
   }
@@ -119,6 +128,7 @@ const Dashboard = () => {
     dispatch(todoList(updatedTodo))
   }
   const data_length = value?.data?.every((res: any) => res.data.length === 0)
+  
   return (
     <>
     <div className={styles.container} style={{fontFamily: `${fontFamily}`}}>
@@ -128,9 +138,14 @@ const Dashboard = () => {
           {todo.length === 0 ? 
           <div className={styles.createList} >
             Create Folder
-          </div>  : value?.data.length === 0 ?
-          <div className={styles.createList} >
-            Create Stages
+          </div>  
+          : 
+          value?.data?.length === 0 ?
+
+          <div className={styles.createList} onClick={()=>{
+            setmodal({form: true, status: 1})
+          }} >
+            <img src={stages} alt="stage" />
           </div> 
           :   
           value?.data?.map((res: any, index: number)=>{
@@ -155,12 +170,10 @@ const Dashboard = () => {
                   </div>
                 </h1>
                 <ul style={{position: "relative", padding: data_length ? "0": "", textAlign: data_length ? "center": "unset" }}>
-                {data_length ? <div>Add task</div>: ""} 
                 {res.data.map((data: any, idx: number)=> {
                   return(
-                    <li key={idx} className={styles.card} data-datatype={index} id={idx?.toString()} style={{cursor: 'pointer', position:"relative", fontSize: `${font_size || 16}px`}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} onTouchStart={(e: any) => {dragged = e.target; console.log(e.target)} }>
+                    <li key={idx} className={styles.card} data-datatype={index} id={idx?.toString()} style={{cursor: 'pointer', position:"relative", fontSize: `${font_size || 16}px`}} draggable="true" onDrag={(e: any)=>{ dragged = e.target }} onTouchStart={(e: any) => {dragged = e.target} }>
                       { data} 
-                      
                       <div className={styles.delete} onClick={(e)=>{
                         const id = document.getElementById(idx?.toString()) as HTMLElement
                         onDelete(id)
@@ -185,20 +198,36 @@ const Dashboard = () => {
                   )
                 })}
                 </ul>
+                { index === 0 ? <div style={{cursor: "pointer", display: "flex", padding: "0rem 2rem"}} onClick={()=> setmodal({form: true, status: 2})}>
+                  <img src={plus} alt="plus" style={{width: "15%"}} />
+                </div>: ""} 
               </div>
             )
           })
           }
+          {
+          value?.data?.length !== 0 &&
+          <div  className={`zone ${styles.listed} ${styles.adding}`} id="todo">
+            <div style={{cursor: "pointer",display: "flex", padding: "0rem 2rem", justifyContent: "center"}} onClick={()=> setmodal({form: true, status: 1})}>
+            <img src={plus} alt="plus" style={{width: "25%"}} />
+            </div>
+          </div>
+          }
         </div>
-        <div className={styles.Formdata}>
-          <form onSubmit={(e)=> todo && todo.length !== 0 ? Stages(e) : alert('Add Todolist First')} className={styles.Stages}>
-            <input required type="text" name="Stages" id="stage" />
-            <button type='submit'>Add Stages</button>
-          </form>
-          <form onSubmit={(e:any) =>  todo && value.data.length !== 0 ? onClick(e) : alert('Add Stages')} className={styles.TaskInput}>
-            <input required type="text" name="todolist"/>
-            <button type='submit' value='sbmit'>Add Task</button>
-          </form>
+        <div className={styles.Formdata} style={{display: modal.form ? "block": "none"}}>
+          <div className={styles.modal}>
+            <form style={{display: modal.status === 1 ? "flex": "none"}} onSubmit={(e)=> todo && todo.length !== 0 ? Stages(e) : alert('Add Todolist First')} className={styles.Stages}>
+              <input required type="text" name="Stages" id="stage" />
+              <button type='submit'>Add Stages</button>
+            </form>
+            <form  style={{display: modal.status === 2 ? "flex": "none"}} onSubmit={(e:any) =>  todo && value.data.length !== 0 ? onClick(e) : alert('Add Stages')} className={styles.TaskInput}>
+              <input required type="text" name="todolist"/>
+              <button type='submit' value='sbmit'>Add Task</button>
+            </form>
+            <span className={styles.exit} onClick={()=>{
+              setmodal({form: false, status: 1})
+            }}>X</span>
+          </div>
         </div>
       </div>
     </div>
