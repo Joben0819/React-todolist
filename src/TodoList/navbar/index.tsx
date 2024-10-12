@@ -113,15 +113,13 @@ useEffect(() => {
   },500)
   const reload = localStorage.getItem('reload')
   if(!reload){
+    setToggle()
     setinstruct(true)
     dispatch(todoList(static_data))    
   }  
 }, [])
 
 let phone = window.navigator.userAgent.indexOf("Mobi") === -1
-console.log( "in here man", phone)
-
-
   return (
     <>
     <div
@@ -131,7 +129,7 @@ console.log( "in here man", phone)
     onClick={()=>{setToggle()}}
     style={{display:  toggle ? "none" : "block" }}
     >
-      <img src={navigation} alt="navigation" style={{width: "5%"}} />
+      <img src={navigation} alt="navigation" style={{width: "10%"}} />
     </div>
     <motion.div className={styles.sidebar} animate={ number >= 841  ? "open" : toggle === true ? "open" : "closed" }
       variants={variants} >

@@ -1,0 +1,15 @@
+.loading{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+        width: 30%;
+        animation: mymove 5s infinite ;
+
+        @keyframes mymove {
+            100%{transform: rotate(360deg);}
+        }
+    }
+}
