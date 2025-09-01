@@ -27,7 +27,7 @@ function App() {
         setload(false)
       }, 1000);
     }, [])
-
+    console.log('loop here')
     if(load) return <><div className={styles.loading}><img src={loading} alt="load" /></div></>
 
   return (
